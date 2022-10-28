@@ -3,8 +3,6 @@ const fs = require("fs");
 
 exports.createThing = (req, res, next) => {
   const thingObject = JSON.parse(req.body.thing);
-  delete thingObject._id;
-  delete thingObject._userId;
   const thing = new Thing({
     ...thingObject,
     userId: req.auth.userId,
