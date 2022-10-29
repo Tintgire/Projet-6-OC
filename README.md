@@ -1,15 +1,27 @@
 # P6-SaucePiquante
 
-Création du fichier frontend --> npm install --> npm start pour écouter le server
+Init back-end :
 
-mise au point des fails : npm audit fix + npm audit fix --force puis on vérifie avec npm audit
+`cd .\backend\`  
+`npm i`  
+`nodemon server`
+`npm audit fix`
 
-Création du fichier backend --> création .gitignore
+Init front-end :
 
-npm init pour créer package.json
+`cd .\frontend\`  
+`npm i`  
+`npm start`
+`npm audit fix`
 
-git init pour créer le repo sur git
+List of package for 'Hot Takes' Back-end installed with npm :
 
-npm install -g nodemon : permet d'actualisé le server à chaque modification --> lancer avec nodemon server
-
-install express : npm install express --save
+`bcrypt version 5.1.0`  
+`dotenv version 16.0.3`  
+`express version 4.18.1`  
+`jsonwebtoken version 8.5.1`  
+`mongoose version 6.6.4`  
+`mongoose-unique-validator version 3.1.0`  
+`morgan version 1.10.0`  
+`multer version 1.4.5-lts.1`  
+`nodemon version 2.0.20`
