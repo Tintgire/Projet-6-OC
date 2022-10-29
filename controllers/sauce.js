@@ -2,7 +2,7 @@ const Thing = require("../models/sauce");
 const fs = require("fs");
 
 exports.createThing = (req, res, next) => {
-  const thingObject = JSON.parse(req.body.thing);
+  const thingObject = JSON.parse(req.body.sauce);
   const thing = new Thing({
     ...thingObject,
     userId: req.auth.userId,
@@ -38,7 +38,7 @@ exports.getOneThing = (req, res, next) => {
 exports.modifyThing = (req, res, next) => {
   const thingObject = req.file
     ? {
-        ...JSON.parse(req.body.thing),
+        ...JSON.parse(req.body.sauce),
         imageUrl: `${req.protocol}://${req.get("host")}/images/${
           req.file.filename
         }`,

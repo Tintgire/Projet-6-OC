@@ -1,10 +1,16 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const morgan = require("morgan");
 
 const sauceRoutes = require("./routes/sauce");
 const userRoutes = require("./routes/user");
 const path = require("path");
+
+const dotenv = require("dotenv");
+const MONGODB_URI = process.env.MONGODB_URI;
+
+dotenv.config();
 
 mongoose
   .connect(
@@ -31,6 +37,7 @@ app.use((req, res, next) => {
 
 app.use(bodyParser.json());
 
+app.use(morgan("dev"));
 app.use(express.json());
 app.use("/api/sauces", sauceRoutes);
 app.use("/api/auth", userRoutes);
