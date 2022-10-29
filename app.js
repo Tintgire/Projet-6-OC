@@ -8,15 +8,14 @@ const userRoutes = require("./routes/user");
 const path = require("path");
 
 const dotenv = require("dotenv");
-const MONGODB_URI = process.env.MONGODB_URI;
 
 dotenv.config();
 
 mongoose
-  .connect(
-    "mongodb+srv://hugo:211297HUGo@cluster0.69owevz.mongodb.net/?retryWrites=true&w=majority",
-    {}
-  )
+  .connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => console.log("Connexion à MongoDB réussie !"))
   .catch(() => console.log("Connexion à MongoDB échouée !"));
 
