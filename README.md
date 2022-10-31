@@ -1,3 +1,3 @@
-# Projet-6-OC
+# hot sauce
 
 Click on Backend or Frontend to see README.md
