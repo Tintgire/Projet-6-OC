@@ -7,11 +7,15 @@ const multer = require("../middleware/multer-config");
 const sauceCtrl = require("../controllers/sauce");
 const likeController = require("../controllers/like");
 
-router.post("/", auth, multer, sauceCtrl.createThing);
-router.get("/", auth, sauceCtrl.getAllStuff);
-router.get("/:id", auth, sauceCtrl.getOneThing);
-router.put("/:id", auth, multer, sauceCtrl.modifyThing);
-router.delete("/:id", auth, sauceCtrl.deleteThing);
+//mise en place des routeurs pour chaque type de route avec ajout du middleware d'authentification
+
+router.post("/", auth, multer, sauceCtrl.createSauce);
+router.get("/", auth, sauceCtrl.getAllSauces);
+router.get("/:id", auth, sauceCtrl.getOneSauce);
+router.put("/:id", auth, multer, sauceCtrl.modifySauce);
+router.delete("/:id", auth, sauceCtrl.deleteSauce);
 router.post("/:id/like", auth, likeController.likeSauce);
+
+//export du routeur
 
 module.exports = router;

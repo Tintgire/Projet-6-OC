@@ -1,10 +1,15 @@
 const multer = require("multer");
+//mise en place du multer permettant le transfert d'images lors des requêtes
+
+//création d'un dictionnaire MIME_TYPES de types de fichiers
 
 const MIME_TYPES = {
   "images/jpg": "jpg",
   "images/jpeg": "jpg",
   "images/png": "png",
 };
+
+//On crée un objet de configuration pour multer
 
 const storage = multer.diskStorage({
   destination: (req, file, callback) => {
@@ -13,8 +18,11 @@ const storage = multer.diskStorage({
   filename: (req, file, callback) => {
     const name = file.originalname.split(" ").join("_");
     const extension = MIME_TYPES[file.mimetype];
+    //création d'un nom de fichier unique grâce à Date.now
     callback(null, name + Date.now() + "." + extension);
   },
 });
+
+//On exporte le middleware multer avec l'objet storage
 
 module.exports = multer({ storage: storage }).single("image");

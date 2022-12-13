@@ -1,25 +1,40 @@
 const express = require("express");
-const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-const morgan = require("morgan");
 
 const sauceRoutes = require("./routes/sauce");
 const userRoutes = require("./routes/user");
 const path = require("path");
+const helmet = require("helmet");
 
 const dotenv = require("dotenv");
 
 dotenv.config({ path: "./vars/.env" });
 
+//mise en place d'un limiteur de connexion pour éviter les attaques
+const rateLimit = require("express-rate-limit");
+
+//définition des caractéristiques du limiteur de connexion
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // fenêtre de 15 minutes
+  max: 5, // Limite chaque IP à 5 connexions max par fenêtre de 15 minutes
+  standardHeaders: true, // Retourne la limitation dans le header `RateLimit-*`
+  legacyHeaders: false, // désactive les headers `X-RateLimit-*`
+});
+
 mongoose
-  .connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(
+    `mongodb+srv://${process.env.USER_ID}:${process.env.USER_PASSWORD}@cluster0.69owevz.mongodb.net/${process.env.DATA_NAME}?retryWrites=true&w=majority`,
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }
+  )
   .then(() => console.log("Connexion à MongoDB réussie !"))
   .catch(() => console.log("Connexion à MongoDB échouée !"));
 
 const app = express();
+
+//mise en place de headers spécifiques afin d'éviter les erreurs CORS
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -34,12 +49,12 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(bodyParser.json());
+app.use(express.json()); //afin d'extraire le corps JSON des requêtes POST //
 
-app.use(morgan("dev"));
-app.use(express.json());
+//définition des différents paths et sécurités pour l'utilisation des routes
+
 app.use("/api/sauces", sauceRoutes);
-app.use("/api/auth", userRoutes);
+app.use("/api/auth", userRoutes, limiter);
 app.use("/images", express.static(path.join(__dirname, "images")));
-
+app.use(helmet());
 module.exports = app;

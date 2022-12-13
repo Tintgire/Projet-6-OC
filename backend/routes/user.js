@@ -1,8 +1,22 @@
+//mise en place d'un routeur Express
+
 const express = require("express");
 const router = express.Router();
+
+//mise en place d'une vérification de la validité de l'email
+const emailValidator = require("../middleware/emailController");
+
+//mise en place d'une vérification de la complexité du password
+const passwordValidator = require("../middleware/password");
+
+//mise en place d'un controlleur pour associer fonctions/routes
+
 const userCtrl = require("../controllers/user");
 
-router.post("/signup", userCtrl.signup);
+//on crée 2 routes POST pour la création et l'authentification de l'utilisateur
+
+router.post("/signup", emailValidator, passwordValidator, userCtrl.signup);
+
 router.post("/login", userCtrl.login);
 
 module.exports = router;
