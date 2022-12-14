@@ -16,7 +16,6 @@ const userCtrl = require("../controllers/user");
 //on crée 2 routes POST pour la création et l'authentification de l'utilisateur
 
 router.post("/signup", emailValidator, passwordValidator, userCtrl.signup);
-
 router.post("/login", userCtrl.login);
 
 module.exports = router;

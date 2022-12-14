@@ -34,6 +34,12 @@ mongoose
 
 const app = express();
 
+app.use(
+  helmet({
+    crossOriginResourcePolicy: false,
+  })
+);
+
 //mise en place de headers spécifiques afin d'éviter les erreurs CORS
 
 app.use((req, res, next) => {
@@ -56,5 +62,4 @@ app.use(express.json()); //afin d'extraire le corps JSON des requêtes POST //
 app.use("/api/sauces", sauceRoutes);
 app.use("/api/auth", userRoutes, limiter);
 app.use("/images", express.static(path.join(__dirname, "images")));
-app.use(helmet());
 module.exports = app;
