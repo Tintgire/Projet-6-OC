@@ -1,41 +1,40 @@
 const Sauce = require("../models/sauce");
 const fs = require("fs");
 
-exports.createSauce = (req, res, next) => {
-  const sauceObject = JSON.parse(req.body.sauce);
-  const sauce = new Sauce({
-    ...sauceObject,
-    userId: req.auth.userId, //on crée l'URL de l'image téléchargée
-    imageUrl: `${req.protocol}://${req.get("host")}/images/${
-      req.file.filename
-    }`,
-  });
-
-  sauce
-    .save()
-    .then(() => {
-      res.status(201).json({ message: "Objet enregistré !" });
-    })
-    .catch((error) => {
-      res.status(400).json({ error });
+exports.createSauce = async (req, res) => {
+  try {
+    const sauceObject = JSON.parse(req.body.sauce);
+    const sauce = new Sauce({
+      ...sauceObject,
+      userId: req.auth.userId,
+      imageUrl: `${req.protocol}://${req.get("host")}/images/${
+        req.file.filename
+      }`,
     });
+
+    await sauce.save();
+
+    res.status(201).json({ message: "Objet enregistré !" });
+  } catch (error) {
+    res.status(400).json({ error: `Invalid input data ${error.message}` });
+  }
 };
 
-exports.getOneSauce = (req, res, next) => {
-  Sauce.findOne({
-    _id: req.params.id,
-  })
-    .then((sauce) => {
-      res.status(200).json(sauce); //on affiche la sauce renvoyée par MongoDB grâce à son Id
-    })
-    .catch((error) => {
-      res.status(404).json({
-        error: error,
-      });
-    });
+exports.getOneSauce = async (req, res) => {
+  try {
+    const sauce = await Sauce.findOne({ _id: req.params.id });
+
+    if (!sauce) {
+      return res.status(404).json({ error: "Sauce not found" });
+    }
+    //on affiche la sauce renvoyée par MongoDB grâce à son Id
+    res.status(200).json(sauce);
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
 };
 
-exports.modifySauce = (req, res, next) => {
+exports.modifySauce = (req, res) => {
   const sauceObject = req.file
     ? {
         //si oui, on le remplace dans l'objet sauce
